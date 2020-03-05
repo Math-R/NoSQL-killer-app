@@ -1,43 +1,43 @@
 const {types} = require('cassandra-driver');
-const {mapToCharacterDB} = require('./character.db.model');
+const {mapToPlayerDB} = require('./player.db.model');
 const {CassandraClient} = require('../database/cassandra-client.database');
 
 module.exports = {
-  getAllCharactersDB() {
-    const query = 'SELECT * FROM workshop.characters';
+  getAllPlayersDB() {
+    const query = 'SELECT * FROM workshop.players';
     return CassandraClient.execute(query).then(resQuery => {
       return resQuery.rows.map((row) =>
-        mapToCharacterDB(row['id'], row['name'], row['house'], row['allegiance'])
+        mapToPlayerDB(row['id'], row['name'], row['level'], row['killCount'])
       )
     });
   },
 
-  getCharacterById(id) {
+  getPlayerById(id) {
     const params = [types.Uuid.fromString(id)];
-    const query = 'SELECT * FROM workshop.characters WHERE id=?';
+    const query = 'SELECT * FROM workshop.players WHERE id=?';
     return CassandraClient.execute(query, params).then(resQuery => {
       const row = resQuery.first();
-      return mapToCharacterDB(row['id'], row['name'], row['house'], row['allegiance']);
+      return mapToPlayerDB(row['id'], row['name'], row['level'], row['killCount']);
     });
   },
 
-  insertCharacter(characterToAdd) {
-    const query = 'INSERT INTO workshop.characters(id,name,house,allegiance) VALUES (?,?,?,?)';
+  insertPlayer(playerToAdd) {
+    const query = 'INSERT INTO workshop.players(id,name,level,killCount) VALUES (?,?,?,?)';
     const newId = types.TimeUuid.now();
-    const params = [newId, characterToAdd.name, characterToAdd.house,characterToAdd.allegiance];
+    const params = [newId, playerToAdd.name, playerToAdd.level, playerToAdd.killCount];
     return CassandraClient.execute(query, params).then(() => {
       return newId;
     });
   },
 
-  updateCharacter(id, characterToUpdate) {
-    const query = 'UPDATE workshop.characters SET name=?, house=?, allegiance=? WHERE id=?';
-    const params = [characterToUpdate.name, characterToUpdate.house, characterToUpdate.allegiance, types.Uuid.fromString(id)];
+  updatePlayer(id, playerToUpdate) {
+    const query = 'UPDATE workshop.players SET name=?, level=?, killCount=? WHERE id=?';
+    const params = [playerToUpdate.name, playerToUpdate.level, playerToUpdate.killCount, types.Uuid.fromString(id)];
     return CassandraClient.execute(query, params).then(resQuery => !!resQuery);
   },
 
-  deleteCharacter(characterIdToDelete) {
-    const query = 'DELETE FROM workshop.characters WHERE id=?';
-    return CassandraClient.execute(query, [characterIdToDelete]).then(resQuery => !!resQuery)
+  deletePlayer(playerIdToDelete) {
+    const query = 'DELETE FROM workshop.players WHERE id=?';
+    return CassandraClient.execute(query, [playerIdToDelete]).then(resQuery => !!resQuery)
   }
 };
