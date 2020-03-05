@@ -1,12 +1,12 @@
 const {
-  getAllPlayersDB, 
-  insertPlayer, 
-  updatePlayer, 
-  deletePlayer, 
+  getAllPlayersDB,
+  insertPlayer,
+  updatePlayer,
+  deletePlayer,
   getPlayerById
 } = require('./player.da');
-const {mapToPlayerDB} = require('./player.db.model');
-const {mapToPlayer} = require('./player.model');
+const { mapToPlayerDB, uuidFromString } = require('./player.db.model');
+const { mapToPlayer } = require('./player.model');
 
 
 module.exports = {
@@ -16,16 +16,17 @@ module.exports = {
   },
 
   addPlayer(playerToAdd) {
-    const playerToAddDB = mapToPlayerDB(null, playerToAdd.name, playerToAdd.house, playerToAdd.allegiance);
+    const playerToAddDB = mapToPlayerDB(null, playerToAdd.name, playerToAdd.level, playerToAdd.killCount);
     return insertPlayer(playerToAddDB);
   },
 
-  getPlayer(id) {
-    return getPlayerById(id).then((player) => mapToPlayer(player));
+  async getPlayer(id) {
+    const dbPlayer = await getPlayerById(id);
+    return mapToPlayer(dbPlayer);
   },
 
   modifyPlayer(playerToUpdate) {
-    const playerToAddDB = mapToPlayerDB(null, playerToUpdate.name, playerToUpdate.house, playerToUpdate.allegiance);
+    const playerToAddDB = mapToPlayerDB(null, playerToUpdate.name, playerToUpdate.level, playerToUpdate.killCount);
     return updatePlayer(playerToUpdate.id, playerToAddDB);
   },
 
