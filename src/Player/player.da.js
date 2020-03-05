@@ -1,6 +1,6 @@
-const {types} = require('cassandra-driver');
-const {mapToPlayerDB} = require('./player.db.model');
-const {CassandraClient} = require('../database/cassandra-client.database');
+const { types } = require('cassandra-driver');
+const { mapToPlayerDB } = require('./player.db.model');
+const { CassandraClient } = require('../database/databaseConnector');
 
 module.exports = {
   getAllPlayersDB() {

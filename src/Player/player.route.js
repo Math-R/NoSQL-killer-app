@@ -1,44 +1,42 @@
-const express = require('express');
-const router = express.Router();
-const {getAllPlayers, addPlayer, modifyPlayer, removePlayer, getPlayer} = require('./player.service');
+const Koa = require('koa');
+const Router = require('koa-router');
+const { getAllPlayers, addPlayer, modifyPlayer, removePlayer, getPlayer } = require('./player.service');
 
-router.get('/', (req, res) => {
-  res.json({api: '/players'})
-});
+const router = new Router();
 
-router.get('/player', (req, res) => {
+router.get('/player', (ctx, next) => {
   getAllPlayers()
-    .then((players) => res.json({players: players}))
-    .catch(err => res.status(500).send(err));
+    .then((players) => ctx.json({ players: players }))
+    .catch(error => ctx.app.emit('error', error, ctx));
 });
 
-router.post('/player', (req, res) => {
-  const playerToAdd = req.body;
+router.post('/player', (ctx, next) => {
+  const playerToAdd = ctx.body;
   addPlayer(playerToAdd)
-    .then((playerId) => res.json({playerIdAdded: playerId}))
-    .catch(err => res.status(500).send(err));
+    .then((playerId) => ctx.json({ playerIdAdded: playerId }))
+    .catch(err => ctx.status(500).send(err));
 });
 
-router.get('/player/:id', (req, res) => {
-  const id = req.params['id'];
+router.get('/player/:id', (ctx, next) => {
+  const id = ctx.params['id'];
   getPlayer(id)
-    .then((player) => res.json({player: player}))
-    .catch(err => res.status(500).send(err));
+    .then((player) => ctx.json({ player: player }))
+    .catch(err => ctx.status(500).send(err));
 });
 
 
-router.patch('/player', (req, res) => {
-  const playerToUpdate = req.body;
+router.patch('/player', (ctx, next) => {
+  const playerToUpdate = ctx.body;
   modifyPlayer(playerToUpdate)
-    .then(wasUpdated => res.json(wasUpdated))
-    .catch(err => res.status(500).send(err));
+    .then(wasUpdated => ctx.json(wasUpdated))
+    .catch(err => ctx.status(500).send(err));
 });
 
-router.delete('/player/:id', (req, res) => {
-  const id = req.params['id'];
+router.delete('/player/:id', (ctx, next) => {
+  const id = ctx.params['id'];
   removePlayer(id)
-    .then(wasDeleted => res.json(wasDeleted))
-    .catch(err => res.status(500).send(err));
+    .then(wasDeleted => ctx.json(wasDeleted))
+    .catch(err => ctx.status(500).send(err));
 });
 
 module.exports = router;
