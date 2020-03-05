@@ -1,42 +1,42 @@
 const express = require('express');
 const router = express.Router();
-const {getAllCharacters, addCharacter, modifyCharacter, removeCharacter, getCharacter} = require('./character.service');
+const {getAllPlayers, addPlayer, modifyPlayer, removePlayer, getPlayer} = require('./player.service');
 
 router.get('/', (req, res) => {
-  res.json({api: '/characters'})
+  res.json({api: '/players'})
 });
 
-router.get('/character', (req, res) => {
-  getAllCharacters()
-    .then((characters) => res.json({characters: characters}))
+router.get('/player', (req, res) => {
+  getAllPlayers()
+    .then((players) => res.json({players: players}))
     .catch(err => res.status(500).send(err));
 });
 
-router.post('/character', (req, res) => {
-  const characterToAdd = req.body;
-  addCharacter(characterToAdd)
-    .then((characterId) => res.json({characterIdAdded: characterId}))
+router.post('/player', (req, res) => {
+  const playerToAdd = req.body;
+  addPlayer(playerToAdd)
+    .then((playerId) => res.json({playerIdAdded: playerId}))
     .catch(err => res.status(500).send(err));
 });
 
-router.get('/character/:id', (req, res) => {
+router.get('/player/:id', (req, res) => {
   const id = req.params['id'];
-  getCharacter(id)
-    .then((character) => res.json({character: character}))
+  getPlayer(id)
+    .then((player) => res.json({player: player}))
     .catch(err => res.status(500).send(err));
 });
 
 
-router.patch('/character', (req, res) => {
-  const characterToUpdate = req.body;
-  modifyCharacter(characterToUpdate)
+router.patch('/player', (req, res) => {
+  const playerToUpdate = req.body;
+  modifyPlayer(playerToUpdate)
     .then(wasUpdated => res.json(wasUpdated))
     .catch(err => res.status(500).send(err));
 });
 
-router.delete('/character/:id', (req, res) => {
+router.delete('/player/:id', (req, res) => {
   const id = req.params['id'];
-  removeCharacter(id)
+  removePlayer(id)
     .then(wasDeleted => res.json(wasDeleted))
     .catch(err => res.status(500).send(err));
 });

@@ -1,35 +1,35 @@
 const {
-  getAllCharactersDB, 
-  insertCharacter, 
-  updateCharacter, 
-  deleteCharacter, 
-  getCharacterById
-} = require('./character.da');
-const {mapToCharacterDB} = require('./character.db.model');
-const {mapToCharacter} = require('./character.model');
+  getAllPlayersDB, 
+  insertPlayer, 
+  updatePlayer, 
+  deletePlayer, 
+  getPlayerById
+} = require('./player.da');
+const {mapToPlayerDB} = require('./player.db.model');
+const {mapToPlayer} = require('./player.model');
 
 
 module.exports = {
-  getAllCharacters() {
-    return getAllCharactersDB()
-      .then(charactersDB => charactersDB.map(mapToCharacter));
+  getAllPlayers() {
+    return getAllPlayersDB()
+      .then(playersDB => playersDB.map(mapToPlayer));
   },
 
-  addCharacter(characterToAdd) {
-    const characterToAddDB = mapToCharacterDB(null, characterToAdd.name, characterToAdd.house, characterToAdd.allegiance);
-    return insertCharacter(characterToAddDB);
+  addPlayer(playerToAdd) {
+    const playerToAddDB = mapToPlayerDB(null, playerToAdd.name, playerToAdd.house, playerToAdd.allegiance);
+    return insertPlayer(playerToAddDB);
   },
 
-  getCharacter(id) {
-    return getCharacterById(id).then((character) => mapToCharacter(character));
+  getPlayer(id) {
+    return getPlayerById(id).then((player) => mapToPlayer(player));
   },
 
-  modifyCharacter(characterToUpdate) {
-    const characterToAddDB = mapToCharacterDB(null, characterToUpdate.name, characterToUpdate.house, characterToUpdate.allegiance);
-    return updateCharacter(characterToUpdate.id, characterToAddDB);
+  modifyPlayer(playerToUpdate) {
+    const playerToAddDB = mapToPlayerDB(null, playerToUpdate.name, playerToUpdate.house, playerToUpdate.allegiance);
+    return updatePlayer(playerToUpdate.id, playerToAddDB);
   },
 
-  removeCharacter(characterIdToDelete) {
-    return deleteCharacter(uuidFromString(characterIdToDelete))
+  removePlayer(playerIdToDelete) {
+    return deletePlayer(uuidFromString(playerIdToDelete))
   }
 };
