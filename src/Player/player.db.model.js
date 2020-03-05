@@ -1,7 +1,7 @@
 const { types } = require('cassandra-driver');
 
 module.exports = {
-  mapToPlayerDB(id = null, name = null, level = null, killCount = null) {
+  mapToPlayerDB(id = null, name = null, level = 1, killCount = 0) {
     return {
       id: id,
       name: name,
