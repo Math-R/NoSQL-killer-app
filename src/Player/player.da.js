@@ -7,7 +7,7 @@ module.exports = {
     const query = 'SELECT * FROM workshop.players';
     return CassandraClient.execute(query).then(resQuery => {
       return resQuery.rows.map((row) =>
-        mapToPlayerDB(row['id'], row['name'], row['level'], row['killCount'])
+        mapToPlayerDB(row['id'], row['name'], row['level'], row['killcount'])
       )
     });
   },
@@ -17,7 +17,7 @@ module.exports = {
     const query = 'SELECT * FROM workshop.players WHERE id=?';
     return CassandraClient.execute(query, params).then(resQuery => {
       const row = resQuery.first();
-      return mapToPlayerDB(row['id'], row['name'], row['level'], row['killCount']);
+      return mapToPlayerDB(row['id'], row['name'], row['level'], row['killcount']);
     });
   },
 
